@@ -94,6 +94,18 @@ impl {{{classname}}} {
 {{#vars}}
 {{#isEnum}}
 /// {{{description}}}
+{{#isInteger}}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, serde_repr::Serialize_repr, serde_repr::Deserialize_repr)]
+#[repr(u8)]
+pub enum {{{enumName}}} {
+{{#allowableValues}}
+{{#enumVars}}
+    #[serde(rename = "{{{value}}}")]
+    {{{name}}} = {{{value}}},
+{{/enumVars}}
+{{/allowableValues}}
+{{/isInteger}}
+{{^isInteger}}
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize, Deserialize)]
 pub enum {{{enumName}}} {
 {{#allowableValues}}
@@ -102,6 +114,7 @@ pub enum {{{enumName}}} {
     {{{name}}},
 {{/enumVars}}
 {{/allowableValues}}
+{{/isInteger}}
 }
 
 impl Default for {{{enumName}}} {
